@@ -3,7 +3,6 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
 
 # Runtime data
 pids
@@ -14,7 +13,6 @@ pids
 # Dirección y archivo para Railway
 /mnt/data/
 backend/tokens.json
-backend/.env
 
 # Environment variables
 .env
@@ -73,30 +71,6 @@ jspm_packages/
 
 # Yarn Integrity file
 .yarn-integrity
-
-# parcel-bundler cache
-.cache
-.parcel-cache
-
-# Next.js build output
-.next
-
-# Nuxt.js build / generate output
-.nuxt
-dist
-
-# Gatsby files
-.cache/
-public
-
-# Commented out home directory bin
-# ~/.local/bin/
-
-# dotenv environment variables file
-.env
-.env.development.local
-.env.test.local
-.env.production.local
 
 # parcel-bundler cache
 .cache

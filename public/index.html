@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>MOYOFY PREMIUM �P Rafa's Bar</title>
+  <title>MOYOFY PREMIUM · Rafa's Bar</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
@@ -97,17 +97,6 @@
       animation: slideInUp 0.6s ease;
     }
     
-    @keyframes slideInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
     .points-display {
       font-size: 2.5rem;
       font-weight: bold;
@@ -130,21 +119,6 @@
       font-weight: bold;
     }
     
-    .change-username-btn {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid var(--primary);
-      color: var(--primary);
-      padding: 5px 10px;
-      border-radius: 10px;
-      margin-top: 10px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .change-username-btn:hover {
-      background: rgba(255, 0, 76, 0.2);
-    }
-    
     .search-box {
       background: rgba(25, 25, 40, 0.9);
       border: 2px solid var(--primary);
@@ -153,19 +127,6 @@
       margin-bottom: 30px;
       box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
       animation: fadeIn 0.7s ease;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    
-    .search-label {
-      display: block;
-      margin-bottom: 10px;
-      font-size: 1.1rem;
-      color: var(--light);
-      font-weight: 500;
     }
     
     .search-input {
@@ -185,10 +146,6 @@
       outline: none;
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(255, 0, 76, 0.3);
-    }
-    
-    .search-input::placeholder {
-      color: #888;
     }
     
     .search-btn {
@@ -212,10 +169,6 @@
       background: var(--primary-dark);
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(255, 0, 76, 0.4);
-    }
-    
-    .search-btn:active {
-      transform: translateY(0);
     }
     
     .results-container {
@@ -283,12 +236,6 @@
       animation: pulse 0.5s ease;
     }
     
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.02); }
-      100% { transform: scale(1); }
-    }
-    
     .message.success {
       background: rgba(0, 255, 170, 0.15);
       border: 1px solid rgba(0, 255, 170, 0.3);
@@ -321,11 +268,6 @@
     .auth-required:hover {
       background: rgba(255, 69, 58, 0.25);
       transform: scale(1.02);
-    }
-    
-    .auth-required i {
-      margin-right: 10px;
-      font-size: 1.2rem;
     }
     
     .ranking-panel {
@@ -438,24 +380,13 @@
 <body>
   <div class="container">
     <header>
-      <h1>?? MOYOFY PREMIUM</h1>
-      <h2>Tu vibra tiene valor �P Rafa's Bar</h2>
+      <h1>🎸 MOYOFY PREMIUM</h1>
+      <h2>Tu vibra tiene valor · Rafa's Bar</h2>
     </header>
     
     <div class="user-panel">
-      <div id="nickname-section" style="display: none;">
-        <h3>?? ?Como te llamas?</h3>
-        <input type="text" id="nickname" placeholder="Ej: RockMaster69" class="search-input">
-        <button onclick="setNickname()" class="search-btn">
-          <i class="fas fa-sign-in-alt"></i> ENTRAR AL BAR
-        </button>
-        <p style="color: #888; margin-top: 10px; font-size: 0.9rem;">
-          * Usa un apodo unico para que aparezca en el ranking
-        </p>
-      </div>
-      
       <div id="user-profile">
-        <h3 id="welcome-text">!Bienvenido, <span id="user-nickname">usuario</span>!</h3>
+        <h3 id="welcome-text">¡Bienvenido, <span id="user-nickname">usuario</span>!</h3>
         <div class="points-display">
           <i class="fas fa-coins"></i> <span id="user-points">100</span>
         </div>
@@ -465,31 +396,28 @@
         <div style="margin-top: 10px; font-size: 0.9rem; color: #aaa;">
           Canciones agregadas: <span id="songs-added">0</span>
         </div>
-        <button onclick="changeUsername()" class="change-username-btn">
-          <i class="fas fa-user-edit"></i> Cambiar apodo
-        </button>
       </div>
     </div>
     
     <div class="search-box">
-      <h3>?? Buscar cancion</h3>
+      <h3>🎵 Buscar canción</h3>
       <p style="color: #aaa; margin-bottom: 15px; font-size: 0.95rem;">
-        Solo se permiten generos afines al rock (clasico, alternativo, metal, punk, indie, industrial, etc.).
+        Solo se permiten géneros afines al rock (clásico, alternativo, metal, punk, indie, industrial, etc.).
         <br>
         <span style="color: var(--success); display: inline-block; margin-top: 5px;">
-          <i class="fas fa-check-circle"></i> !Gana MOYOS por cada cancion que agregues!
+          <i class="fas fa-check-circle"></i> ¡Gana MOYOS por cada canción que agregues!
         </span>
       </p>
       
-      <input type="text" id="song-search" placeholder="Busca tu cancion favorita..." class="search-input">
+      <input type="text" id="song-search" placeholder="Busca tu canción favorita..." class="search-input">
       <button onclick="searchSongs()" class="search-btn">
         <i class="fas fa-search"></i> BUSCAR CANCIONES
       </button>
       
       <div id="auth-required-message" style="display: none;" class="auth-required" onclick="redirectToAuth()">
-        <i class="fas fa-lock"></i> <strong>?? !NECESITAS AUTENTICARTE CON YOUTUBE!</strong><br>
+        <i class="fas fa-lock"></i> <strong>🔐 ¡NECESITAS AUTENTICARTE CON YOUTUBE!</strong><br>
         Para agregar canciones a la playlist, debes autorizar MOYOFY con tu cuenta de Google.<br>
-        <small>(Solo una vez por sesion)</small>
+        <small>(Solo una vez por sesión)</small>
       </div>
       
       <div id="message-container"></div>
@@ -497,14 +425,14 @@
       <div class="results-container" id="results-container">
         <div class="loading">
           <div class="spinner"></div>
-          <p>?Que cancion quieres agregar hoy?</p>
+          <p>¿Qué canción quieres agregar hoy?</p>
         </div>
       </div>
     </div>
     
     <div class="ranking-panel">
       <div class="ranking-title">
-        <i class="fas fa-trophy"></i> ?? RANKING DEL BAR
+        <i class="fas fa-trophy"></i> 🏆 RANKING DEL BAR
       </div>
       <div id="ranking-list">
         <div class="loading">
@@ -516,36 +444,40 @@
   </div>
   
   <footer>
-    <p>MOYOFY PREMIUM v2 �P Sistema de entretenimiento social para bares</p>
-    <p>Musica impulsada por YouTube �P c 2025 Abundia.io</p>
+    <p>MOYOFY PREMIUM v2 · Sistema de entretenimiento social para bares</p>
+    <p>Música impulsada por YouTube · © 2025 Abundia.io</p>
   </footer>
   
   <div class="confetti" id="confetti-container"></div>
 
   <script>
-    // Variables globales
     let currentUser = null;
     let API_BASE = window.location.origin;
     let requiresAuth = false;
     
-    // Inicializar cuando se cargue el DOM
     document.addEventListener('DOMContentLoaded', () => {
-      console.log('?? MOYOFY PREMIUM v2 cargado');
+      console.log('🚀 MOYOFY PREMIUM v2 cargado');
       
-      // Verificar conexion con el servidor
       checkServerConnection();
       
-      // Cargar perfil de usuario si existe en localStorage
       const savedUser = localStorage.getItem('moyofy_user');
       if (savedUser) {
         currentUser = JSON.parse(savedUser);
         showUserProfile();
         loadUserRanking();
       } else {
-        showNicknameSection();
+        // Usuario por defecto para producción
+        currentUser = {
+          id: `user_${Date.now()}`,
+          nickname: "Invitado",
+          points: 100,
+          level: 1,
+          songsAdded: 0
+        };
+        localStorage.setItem('moyofy_user', JSON.stringify(currentUser));
+        showUserProfile();
       }
       
-      // Event listener para busqueda con Enter
       document.getElementById('song-search').addEventListener('keyup', (e) => {
         if (e.key === 'Enter') {
           searchSongs();
@@ -553,49 +485,35 @@
       });
     });
     
-    // Verificar conexion con el servidor y estado de autenticacion
     async function checkServerConnection() {
       try {
         const response = await fetch(`${API_BASE}/health`);
         const data = await response.json();
         
         if (data.ok) {
-          console.log('? Conexion con servidor exitosa');
+          console.log('✅ Conexión con servidor exitosa');
           if (!data.hasValidTokens) {
             requiresAuth = true;
             showAuthRequiredMessage();
           }
         }
       } catch (error) {
-        console.error('Error al verificar conexion:', error);
-        showMessage('?? Error de conexion con el servidor. Por favor, recarga la pagina.', 'error');
+        console.error('Error al verificar conexión:', error);
+        showMessage('⚠️ Error de conexión con el servidor. Por favor, recarga la página.', 'error');
       }
     }
     
-    // Mostrar mensaje de autorizacion requerida
     function showAuthRequiredMessage() {
       const container = document.getElementById('auth-required-message');
       container.style.display = 'block';
     }
     
-    // Redirigir a pagina de autorizacion
     function redirectToAuth() {
       window.location.href = `${API_BASE}/auth`;
     }
     
-    // Mostrar seccion de apodo
-    function showNicknameSection() {
-      document.getElementById('nickname-section').style.display = 'block';
-      document.getElementById('user-profile').style.display = 'none';
-      document.getElementById('auth-required-message').style.display = 'none';
-    }
-    
-    // Mostrar perfil de usuario
     function showUserProfile() {
       if (!currentUser) return;
-      
-      document.getElementById('nickname-section').style.display = 'none';
-      document.getElementById('user-profile').style.display = 'block';
       
       document.getElementById('user-nickname').textContent = currentUser.nickname;
       document.getElementById('user-points').textContent = currentUser.points || 100;
@@ -603,75 +521,18 @@
       document.getElementById('songs-added').textContent = currentUser.songsAdded || 0;
     }
     
-    // Cambiar apodo de usuario
-    function changeUsername() {
-      // Limpiar datos del usuario actual
-      localStorage.removeItem('moyofy_user');
-      currentUser = null;
-      
-      // Mostrar seccion de apodo
-      showNicknameSection();
-      
-      // Limpiar campo de busqueda
-      document.getElementById('song-search').value = '';
-      document.getElementById('results-container').innerHTML = `
-        <div class="loading">
-          <div class="spinner"></div>
-          <p>?Que cancion quieres agregar hoy?</p>
-        </div>
-      `;
-      
-      showMessage('?? Ingresa tu nuevo apodo para continuar', 'info');
-    }
-    
-    // Establecer apodo de usuario
-    function setNickname() {
-      const nickname = document.getElementById('nickname').value.trim();
-      if (!nickname || nickname.length < 3) {
-        showMessage('?? Ingresa un apodo valido (minimo 3 caracteres)', 'warning');
-        return;
-      }
-      
-      // Generar ID de usuario unico basado en el apodo
-      const userId = `user_${nickname.toLowerCase().replace(/[^a-z0-9]/g, '_')}_${Date.now()}`;
-      
-      currentUser = {
-        id: userId,
-        nickname: nickname,
-        points: 100,
-        level: 1,
-        songsAdded: 0
-      };
-      
-      // Guardar en localStorage
-      localStorage.setItem('moyofy_user', JSON.stringify(currentUser));
-      
-      // Mostrar perfil de usuario
-      showUserProfile();
-      
-      // Cargar ranking
-      loadUserRanking();
-      
-      // Mensaje de bienvenida con animacion
-      showMessage(`?? !Bienvenido ${nickname} al Rafa's Bar!`, 'success');
-      showConfetti();
-    }
-    
-    // Buscar canciones
     async function searchSongs() {
       const query = document.getElementById('song-search').value.trim();
       if (!query) {
-        showMessage('? Ingresa el nombre de una cancion o artista', 'error');
+        showMessage('❌ Ingresa el nombre de una canción o artista', 'error');
         return;
       }
       
       if (!currentUser) {
-        showMessage('?? Necesitas ingresar tu nombre primero', 'warning');
-        showNicknameSection();
+        showMessage('⚠️ Necesitas ingresar tu nombre primero', 'warning');
         return;
       }
       
-      // Mostrar loading
       document.getElementById('results-container').innerHTML = `
         <div class="loading">
           <div class="spinner"></div>
@@ -687,18 +548,16 @@
           throw new Error(data.error || 'Error al buscar canciones');
         }
         
-        // Mostrar resultados
         displaySearchResults(data.items, data.filterStats);
         
-        // Mensaje de exito
         if (data.items.length > 0) {
-          showMessage(`? !Encontramos ${data.items.length} canciones para ti!`, 'success');
+          showMessage(`✅ ¡Encontramos ${data.items.length} canciones para ti!`, 'success');
         } else {
-          showMessage('?? No encontramos canciones que cumplan con los criterios del bar', 'warning');
+          showMessage('🔍 No encontramos canciones que cumplan con los criterios del bar', 'warning');
         }
         
       } catch (error) {
-        console.error('Error en busqueda:', error);
+        console.error('Error en búsqueda:', error);
         document.getElementById('results-container').innerHTML = `
           <div class="message error">
             <i class="fas fa-exclamation-circle"></i> ${error.message}
@@ -707,7 +566,6 @@
       }
     }
     
-    // Mostrar resultados de busqueda
     function displaySearchResults(items, stats) {
       const container = document.getElementById('results-container');
       
@@ -716,17 +574,9 @@
           <div class="message warning">
             <i class="fas fa-music"></i> No se encontraron canciones que cumplan con los criterios de Rafa's Bar.
             <p style="margin-top: 10px; font-size: 0.9rem; color: #ddd;">
-              ?? Recuerda: Solo se permiten generos rock y sus variantes (incluyendo industrial, alternativo, etc.).
-              <br>Prueba con terminos como "<strong>Marilyn Manson</strong>", "<strong>classic rock</strong>", "<strong>metal</strong>", "<strong>industrial rock</strong>", etc.
+              ⚠️ Recuerda: Solo se permiten géneros rock y sus variantes.
+              <br>Prueba con términos como "classic rock", "metal", "punk rock", etc.
             </p>
-            <div style="margin-top: 15px; padding: 10px; background: rgba(0, 255, 170, 0.1); border-radius: 8px;">
-              <p style="color: var(--success); font-weight: bold;">
-                <i class="fas fa-lightbulb"></i> ?Sabias que Marilyn Manson es considerado rock industrial y alternativo?
-              </p>
-              <p style="color: #aaa; margin-top: 5px;">
-                Si no aparece, podrias probar con "Marilyn Manson The Beautiful People" o "Marilyn Manson Rock is Dead"
-              </p>
-            </div>
           </div>
         `;
         return;
@@ -760,22 +610,19 @@
       container.innerHTML = html;
     }
     
-    // Agregar cancion a playlist
     async function addSong(videoId, title, element) {
       if (!currentUser) {
-        showMessage('?? Necesitas ingresar tu nombre primero', 'warning');
-        showNicknameSection();
+        showMessage('⚠️ Necesitas ingresar tu nombre primero', 'warning');
         return;
       }
       
       if (requiresAuth) {
-        showMessage('?? Necesitas autenticarte con YouTube para agregar canciones', 'error');
+        showMessage('🔐 Necesitas autenticarte con YouTube para agregar canciones', 'error');
         showAuthRequiredMessage();
         return;
       }
       
       try {
-        // Deshabilitar boton temporalmente
         const button = element.querySelector('.add-btn');
         const originalText = button.innerHTML;
         button.disabled = true;
@@ -787,7 +634,7 @@
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            playlistId: 'PLo_v1BZSJlIvJnX7ISeilNokZp58D1nCe', // Playlist de Rafas
+            playlistId: 'PLo_v1BZSJlIu1xn68IYp164HHvQR2p5K0',
             videoId: videoId,
             userId: currentUser.id
           })
@@ -796,11 +643,9 @@
         const data = await response.json();
         
         if (data.ok) {
-          // Animacion de exito
           element.classList.add('bounce');
           element.style.backgroundColor = 'rgba(0, 255, 170, 0.15)';
           
-          // Actualizar puntos de usuario
           currentUser.points = (currentUser.points || 100) + 10;
           currentUser.level = Math.floor(currentUser.points / 100) + 1;
           currentUser.songsAdded = (currentUser.songsAdded || 0) + 1;
@@ -809,19 +654,16 @@
           document.getElementById('user-level').textContent = currentUser.level;
           document.getElementById('songs-added').textContent = currentUser.songsAdded;
           
-          // Guardar en localStorage
           localStorage.setItem('moyofy_user', JSON.stringify(currentUser));
           
-          // Mensaje de exito
-          let successMessage = `? !${title} agregada a la playlist! +10 MOYOS`;
+          let successMessage = `✅ ¡${title} agregada a la playlist! +10 MOYOS`;
           
           showMessage(successMessage, 'success');
           
-          // Limpiar busqueda despues de exito
           document.getElementById('song-search').value = '';
           document.getElementById('results-container').innerHTML = `
             <div class="message success">
-              <i class="fas fa-check-circle"></i> !Cancion agregada exitosamente!
+              <i class="fas fa-check-circle"></i> ¡Canción agregada exitosamente!
             </div>
           `;
           
@@ -829,16 +671,15 @@
           if (data.requiresAuth) {
             requiresAuth = true;
             showAuthRequiredMessage();
-            throw new Error('?? Necesitas autenticarte con YouTube para agregar canciones');
+            throw new Error('🔐 Necesitas autenticarte con YouTube para agregar canciones');
           }
-          throw new Error(data.error || 'Error al agregar cancion');
+          throw new Error(data.error || 'Error al agregar canción');
         }
         
       } catch (error) {
-        console.error('Error al agregar cancion:', error);
-        showMessage(`? Error: ${error.message}`, 'error');
+        console.error('Error al agregar canción:', error);
+        showMessage(`❌ Error: ${error.message}`, 'error');
       } finally {
-        // Restaurar boton
         const button = element.querySelector('.add-btn');
         if (button) {
           button.disabled = false;
@@ -848,7 +689,6 @@
       }
     }
     
-    // Cargar ranking de usuarios
     async function loadUserRanking() {
       try {
         const response = await fetch(`${API_BASE}/user/profile?userId=${currentUser?.id || 'anonymous'}`);
@@ -862,14 +702,13 @@
       }
     }
     
-    // Mostrar ranking
     function displayRanking(users) {
       const container = document.getElementById('ranking-list');
       
       if (!users || users.length === 0) {
         container.innerHTML = `
           <div class="message info" style="background: rgba(108, 117, 125, 0.15); border: 1px solid rgba(108, 117, 125, 0.3);">
-            <i class="fas fa-users"></i> Aun no hay usuarios en el ranking
+            <i class="fas fa-users"></i> Aún no hay usuarios en el ranking
           </div>
         `;
         return;
@@ -885,11 +724,11 @@
           <div class="rank-item" ${highlight}>
             <span>
               <strong>${user.rank}.</strong> ${user.nickname}
-              ${isCurrentUser ? '<span style="color: var(--primary); margin-left: 5px;">(TU)</span>' : ''}
+              ${isCurrentUser ? '<span style="color: var(--primary); margin-left: 5px;">(TÚ)</span>' : ''}
             </span>
             <span>
               <i class="fas fa-coins" style="color: var(--success); margin-right: 5px;"></i>
-              ${user.points} MOYOS �E Nivel ${user.level}
+              ${user.points} MOYOS • Nivel ${user.level}
             </span>
           </div>
         `;
@@ -898,7 +737,6 @@
       container.innerHTML = html;
     }
     
-    // Mostrar mensaje con animacion
     function showMessage(text, type = 'info') {
       const container = document.getElementById('message-container');
       container.innerHTML = `
@@ -908,18 +746,15 @@
         </div>
       `;
       
-      // Auto-ocultar despues de 5 segundos
       setTimeout(() => {
         container.innerHTML = '';
       }, 5000);
     }
     
-    // Mostrar confeti para celebraciones
     function showConfetti() {
       const confettiContainer = document.getElementById('confetti-container');
       confettiContainer.innerHTML = '';
       
-      // Crear particulas de confeti
       for (let i = 0; i < 100; i++) {
         const confetti = document.createElement('div');
         confetti.style.position = 'absolute';
@@ -936,7 +771,6 @@
         confettiContainer.appendChild(confetti);
       }
       
-      // Eliminar confeti despues de la animacion
       setTimeout(() => {
         confettiContainer.innerHTML = '';
       }, 5000);
@@ -946,18 +780,6 @@
       const colors = ['#ff004c', '#00ffaa', '#ffcc00', '#ff6b6b', '#4ecdc4', '#45b7d1'];
       return colors[Math.floor(Math.random() * colors.length)];
     }
-    
-    // CSS para animacion de confeti
-    const style = document.createElement('style');
-    style.innerHTML = `
-      @keyframes fall {
-        to {
-          transform: translateY(100vh) rotate(360deg);
-          opacity: 0;
-        }
-      }
-    `;
-    document.head.appendChild(style);
   </script>
 </body>
 </html>

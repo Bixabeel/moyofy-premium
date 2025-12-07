@@ -9,16 +9,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// === UTF-8 para soporte completo de caracteres ===
+// === CONFIGURACIÓN UTF-8 CORRECTA ===
 app.use((req, res, next) => {
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   next();
 });
 
-// === IMPORTAR EL NUEVO SISTEMA DE FILTRADO ===
+// === IMPORTAR EL SISTEMA DE FILTRADO ===
 const { filterSongForBar } = require('./utils/music-filter');
 
-// === CONFIGURACIÓN YOUTUBE API CON AUTENTICACIÓN CORRECTA ===
+// === CONFIGURACIÓN YOUTUBE API ===
 const youtubeApiKey = process.env.YOUTUBE_API_KEY;
 if (!youtubeApiKey) {
   console.error("❌ ERROR CRÍTICO: No se encontró YOUTUBE_API_KEY en .env");
@@ -45,7 +45,6 @@ if (fs.existsSync(TOKEN_PATH)) {
       hasValidTokens = true;
       console.log("✅ TOKENS cargados correctamente.");
       
-      // Refrescar token automáticamente si es necesario
       oAuth2Client.on('tokens', (tokens) => {
         if (tokens.refresh_token) {
           fs.writeFileSync(TOKEN_PATH, JSON.stringify(tokens, null, 2));
@@ -56,7 +55,7 @@ if (fs.existsSync(TOKEN_PATH)) {
   } catch (err) {
     console.error("❌ Error al cargar tokens.json:", err.message);
     if (fs.existsSync(TOKEN_PATH)) {
-      fs.unlinkSync(TOKEN_PATH); // Eliminar archivo corrupto
+      fs.unlinkSync(TOKEN_PATH);
     }
   }
 }
@@ -83,7 +82,7 @@ app.get("/oauth2callback", async (req, res) => {
     hasValidTokens = true;
     lastAuthError = null;
     console.log("✅ Nuevos tokens guardados.");
-    res.redirect("/");
+    res.redirect('/');
   } catch (err) {
     lastAuthError = err.message;
     console.error("Error en OAuth callback:", err.message);
@@ -100,7 +99,7 @@ app.get("/oauth2callback", async (req, res) => {
   }
 });
 
-// === RUTA DE SALUD (para Railway) ===
+// === RUTA DE SALUD ===
 app.get("/health", (req, res) => {
   res.json({
     status: "ok",
@@ -112,7 +111,7 @@ app.get("/health", (req, res) => {
   });
 });
 
-// === BÚSQUEDA DE CANCIONES MEJORADA ===
+// === BÚSQUEDA DE CANCIONES ===
 app.get("/search", async (req, res) => {
   try {
     const query = req.query.q;
@@ -238,9 +237,17 @@ app.post("/add-song", async (req, res) => {
   }
 });
 
-// === SERVIR INTERFAZ FRONTEND (RUTA CORREGIDA PARA RAILWAY) ===
+// === SERVIR INTERFAZ FRONTEND (RUTAS CORREGIDAS PARA PRODUCCIÓN) ===
 const publicPath = path.join(__dirname, "../public");
 const indexPath = path.join(publicPath, "index.html");
+
+// Diagnóstico en producción
+if (process.env.NODE_ENV === 'production') {
+  console.log("🔍 Verificando rutas en producción:");
+  console.log("publicPath:", publicPath);
+  console.log("indexPath:", indexPath);
+  console.log("Directorio actual:", __dirname);
+}
 
 app.use(express.static(publicPath, {
   setHeaders: (res) => {
@@ -252,10 +259,17 @@ app.get("/", (_, res) => {
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
   } else {
-    console.error("❌ index.html no encontrado en:", indexPath);
+    console.error("❌ ERROR CRÍTICO: index.html no encontrado en:", indexPath);
+    try {
+      const publicFiles = fs.readdirSync(publicPath);
+      console.error("📁 Archivos en public/:", publicFiles);
+    } catch (err) {
+      console.error("❌ Error al listar public/:", err.message);
+    }
     res.status(500).json({ 
       ok: false, 
-      error: "Interfaz principal no disponible - index.html no encontrado" 
+      error: "Interfaz principal no disponible - index.html no encontrado",
+      path_checked: indexPath
     });
   }
 });
@@ -273,5 +287,25 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`🚀 MOYOFY PREMIUM ONLINE EN PUERTO ${PORT}`);
-  console.log(`🌐 URL base: ${process.env.REDIRECT_URI?.replace('/oauth2callback', '') || 'http://localhost:' + PORT}`);
+  console.log(`🌐 URL local: http://localhost:${PORT}`);
+  
+  const baseUrl = process.env.REDIRECT_URI 
+    ? process.env.REDIRECT_URI.replace('/oauth2callback', '') 
+    : `http://localhost:${PORT}`;
+  
+  console.log(`🔗 URL de autenticación: ${baseUrl}/auth`);
+  
+  // Verificación crítica al iniciar
+  setTimeout(() => {
+    if (!youtubeApiKey) {
+      console.error("❌ ¡ALERTA! YOUTUBE_API_KEY no está configurada.");
+    }
+    if (!process.env.OAUTH_CLIENT_ID || !process.env.OAUTH_CLIENT_SECRET) {
+      console.error("❌ ¡ALERTA! Credenciales OAuth no configuradas.");
+    }
+    if (!hasValidTokens) {
+      console.warn("⚠️ ¡IMPORTANTE! Necesitas autenticarte con YouTube para agregar canciones.");
+      console.warn(`   Visita: ${baseUrl}/auth`);
+    }
+  }, 2000);
 });

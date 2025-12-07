@@ -5,7 +5,6 @@
 
 // ✅ ARTISTAS Y BANDAS PERMITIDOS (Lista Blanca expandida - PRIORIDAD MÁXIMA)
 const ALLOWED_ARTISTS = {
-  // Rock Clásico y Hard Rock
   classic: [
     "queen", "acdc", "ac/dc", "led zeppelin", "the beatles", "rolling stones",
     "pink floyd", "the who", "jimi hendrix", "cream", "deep purple", "van halen",
@@ -14,8 +13,6 @@ const ALLOWED_ARTISTS = {
     "rush", "styx", "kansas", "yes", "genesis", "supertramp", "elton john",
     "david bowie", "rod stewart", "cat stevens", "eric clapton", "santana"
   ],
-  
-  // Metal (todos los subgéneros)
   metal: [
     "metallica", "iron maiden", "slayer", "megadeth", "judas priest", "motorhead",
     "black sabbath", "ozzy osbourne", "pantera", "tool", "system of a down",
@@ -24,8 +21,6 @@ const ALLOWED_ARTISTS = {
     "mastodon", "high on fire", "sleep", "electric wizard", "cannibal corpse",
     "death", "morbid angel", "behemoth", "dimmu borgir", "emperor"
   ],
-  
-  // Rock Alternativo y Grunge
   alternative: [
     "nirvana", "pearl jam", "soundgarden", "alice in chains", "stone temple pilots",
     "tool", "red hot chili peppers", "foals", "queens of the stone age", "dave matthews band",
@@ -34,23 +29,17 @@ const ALLOWED_ARTISTS = {
     "linkin park", "deftones", "rage against the machine", "audioslave", "muse",
     "arctic monkeys", "the strokes", "the killers", "kings of leon", "cage the elephant"
   ],
-  
-  // Punk y Hardcore
   punk: [
     "ramones", "sex pistols", "the clash", "dead kennedys", "black flag", "misfits",
     "bad brains", "minor threat", "circle jerk", "social distortion", "rancid",
     "dropkick murphys", "the offspring", "bad religion", "anti-flag", "nofx",
     "rise against", "against me", "propagandhi", "strike anywhere", "the bouncing souls"
   ],
-  
-  // Industrial, Goth y Experimental
   industrial: [
     "ministry", "nine inch nails", "skinny puppy", "killing joke", "godflesh",
     "front line assembly", "fear factory", "type o negative", "the cure", "depeche mode",
     "new order", "joy division", "bauhaus", "siouxsie and the banshees", "the sisters of mercy"
   ],
-  
-  // Rock Latino y Español (solo bandas de rock genuino)
   latino: [
     "soda stereo", "caifanes", "heroes del silencio", "enanitos verdes", "fito paez",
     "andres calamaro", "los fabulosos cadillacs", "la rota", "molotov", "cafe tacvba",
@@ -75,7 +64,6 @@ const ALLOWED_GENRES = [
 
 // ❌ BLOQUEOS ABSOLUTOS (Lista Negra - Sin excepciones)
 const BLOCKED_TERMS = [
-  // Géneros prohibidos (foco en música no-rock)
   "reggaeton", "reguetón", "trap", "perreo", "bachata", "salsa", 
   "vallenato", "cumbia", "merengue", "norteño", "corridos", "ranchera",
   "balada", "romántica", "cristiana", "gospel", "worship", "infantil",
@@ -84,10 +72,14 @@ const BLOCKED_TERMS = [
   "hip hop", "r&b", "soul", "jazz", "electronica", "electrónica", "tecno",
   "techno", "edm", "dance", "house", "trance", "reggae", "dancehall",
   "afrobeat", "funk", "disco", "latin", "latino", "romantica", "chill",
-  "lofi", "ambient", "mariachi", "banda", "tropical", "bolero", "tango"
+  "lofi", "ambient", "mariachi", "banda", "tropical", "bolero", "tango",
+  "bad bunny", "pimpinela", "karol g", "anuel", "feid", "maluma", "yuri",
+  "manuel mijares", "camilo sesto", "cristian castro", "luis miguel", "rosalía",
+  "la oreja de van gogh", "camilo", "grupo firme", "temerarios", "vicente fernández",
+  "ana gabriel"
 ];
 
-// 🧠 FUNCIÓN PARA VERIFICAR SI UN ARTISTA ESTÁ PERMITIDO (PRIORIDAD MÁXIMA)
+// 🧠 FUNCIÓN PARA VERIFICAR SI UN ARTISTA ESTÁ PERMITIDO
 function isAllowedArtist(text = "") {
   const normalizedText = text
     .toLowerCase()
@@ -95,7 +87,6 @@ function isAllowedArtist(text = "") {
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9\s]/g, ' ');
   
-  // Buscar en TODAS las categorías de artistas
   for (const category in ALLOWED_ARTISTS) {
     const artists = ALLOWED_ARTISTS[category];
     
@@ -105,7 +96,6 @@ function isAllowedArtist(text = "") {
         .replace(/[\u0300-\u036f]/g, '')
         .trim();
       
-      // Verificar si el artista aparece como palabra completa
       const regex = new RegExp(`\\b${normalizedArtist}\\b`, 'i');
       if (regex.test(normalizedText)) {
         console.log(`✅ Artista permitido encontrado: ${artist} (categoría: ${category})`);
@@ -131,13 +121,12 @@ function isAllowedGenre(text = "") {
       .replace(/[\u0300-\u036f]/g, '')
       .trim();
     
-    // Buscar coincidencias de género
     const regex = new RegExp(`\\b${normalizedGenre}\\b`, 'i');
     return regex.test(normalizedText);
   });
 }
 
-// 🔍 FUNCIÓN DE BLOQUEO ABSOLUTO (mejorada)
+// 🔍 FUNCIÓN DE BLOQUEO ABSOLUTO
 function isBlocked(text = "") {
   const normalizedText = text
     .toLowerCase()
@@ -151,17 +140,15 @@ function isBlocked(text = "") {
       .replace(/[\u0300-\u036f]/g, '')
       .trim();
     
-    // Buscar coincidencias exactas de palabras
     const regex = new RegExp(`\\b${normalizedTerm}\\b`, 'i');
     return regex.test(normalizedText);
   });
 }
 
-// 📊 SISTEMA DE PUNTUACIÓN INTELIGENTE (mejorado)
+// 📊 SISTEMA DE PUNTUACIÓN INTELIGENTE
 function calculateSongScore(text = "") {
-  let score = 0.6; // Puntuación base más alta para ser menos restrictivo
+  let score = 0.6;
   
-  // Palabras clave positivas (rock, guitar, etc.)
   const positiveKeywords = [
     "rock", "guitar", "drums", "metal", "punk", "alternative", 
     "classic", "blues", "heavy", "distortion", "amplifier", "riff",
@@ -171,7 +158,6 @@ function calculateSongScore(text = "") {
     "tour", "album", "live", "studio", "recording", "musician", "composer"
   ];
   
-  // Palabras clave negativas (baile, romántica, etc.)
   const negativeKeywords = [
     "baile", "romántica", "suave", "dulce", "amor", "corazón", 
     "lento", "suave", "romance", "boda", "fiesta", "club",
@@ -180,17 +166,14 @@ function calculateSongScore(text = "") {
     "mix", "remix", "dance", "electronic", "edm", "house", "techno"
   ];
   
-  // Sumar puntos por keywords positivas
   positiveKeywords.forEach(keyword => {
     if (text.includes(keyword)) score += 0.1;
   });
   
-  // Restar puntos por keywords negativas
   negativeKeywords.forEach(keyword => {
     if (text.includes(keyword)) score -= 0.15;
   });
   
-  // Bonus por palabras clave de artistas legendarios
   const legendaryKeywords = ["queen", "zeppelin", "beatles", "stones", "sabbath", "metallica", "nirvana", "rush", "acdc"];
   legendaryKeywords.some(keyword => {
     if (text.includes(keyword)) {
@@ -200,7 +183,6 @@ function calculateSongScore(text = "") {
     return false;
   });
   
-  // Límites de puntuación
   return Math.max(0, Math.min(1, score));
 }
 
@@ -209,7 +191,6 @@ function classifySong(songData) {
   const { title, artist, channelId, channelTitle } = songData;
   const text = `${title} ${artist} ${channelTitle}`.toLowerCase();
   
-  // 1. PRIMERO: Verificar bloqueos absolutos (lista negra)
   if (isBlocked(text)) {
     return { 
       allowed: false, 
@@ -219,7 +200,6 @@ function classifySong(songData) {
     };
   }
   
-  // 2. SEGUNDO: Verificar artistas permitidos (máxima prioridad)
   if (isAllowedArtist(text)) {
     return { 
       allowed: true, 
@@ -229,7 +209,6 @@ function classifySong(songData) {
     };
   }
   
-  // 3. TERCERO: Verificar géneros permitidos en título
   if (isAllowedGenre(text)) {
     return { 
       allowed: true, 
@@ -238,18 +217,17 @@ function classifySong(songData) {
     };
   }
   
-  // 4. CUARTO: Sistema de puntuación mejorado
   const score = calculateSongScore(text);
   
   return { 
-    allowed: score >= 0.5, // Umbral más bajo para ser menos restrictivo
+    allowed: score >= 0.5,
     reason: score >= 0.5 ? "score_approved" : "score_rejected",
     confidence: Math.min(0.9, Math.max(0.1, score)),
     scoreDetails: score
   };
 }
 
-// 🎯 FUNCIÓN PRINCIPAL PARA INTEGRAR EN EL SERVIDOR
+// 🎯 FUNCIÓN PRINCIPAL
 function filterSongForBar(songData, barConfig = { name: "Rafa's Bar", strictMode: false }) {
   const result = classifySong(songData);
   
@@ -263,7 +241,7 @@ function filterSongForBar(songData, barConfig = { name: "Rafa's Bar", strictMode
   };
 }
 
-// 📦 EXPORTAR FUNCIONES (CommonJS)
+// 📦 EXPORTAR FUNCIONES
 module.exports = {
   filterSongForBar,
   classifySong,
