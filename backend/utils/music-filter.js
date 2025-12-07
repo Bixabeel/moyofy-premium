@@ -1,4 +1,4 @@
-// ================================
+﻿// ================================
 // MOYOFY FILTER v3 - SISTEMA INTELIGENTE MEJORADO
 // Rafa's Bar - Versión Premium con prioridad de artistas
 // ================================
@@ -96,9 +96,9 @@ function isAllowedArtist(text = "") {
         .replace(/[\u0300-\u036f]/g, '')
         .trim();
       
-      const regex = new RegExp(`\\b${normalizedArtist}\\b`, 'i');
+      const regex = new RegExp(\\b\\b, 'i');
       if (regex.test(normalizedText)) {
-        console.log(`✅ Artista permitido encontrado: ${artist} (categoría: ${category})`);
+        console.log(✅ Artista permitido encontrado:  (categoría: ));
         return true;
       }
     }
@@ -121,7 +121,7 @@ function isAllowedGenre(text = "") {
       .replace(/[\u0300-\u036f]/g, '')
       .trim();
     
-    const regex = new RegExp(`\\b${normalizedGenre}\\b`, 'i');
+    const regex = new RegExp(\\b\\b, 'i');
     return regex.test(normalizedText);
   });
 }
@@ -140,7 +140,7 @@ function isBlocked(text = "") {
       .replace(/[\u0300-\u036f]/g, '')
       .trim();
     
-    const regex = new RegExp(`\\b${normalizedTerm}\\b`, 'i');
+    const regex = new RegExp(\\b\\b, 'i');
     return regex.test(normalizedText);
   });
 }
@@ -189,7 +189,7 @@ function calculateSongScore(text = "") {
 // 🧠 SISTEMA DE CLASIFICACIÓN INTELIGENTE
 function classifySong(songData) {
   const { title, artist, channelId, channelTitle } = songData;
-  const text = `${title} ${artist} ${channelTitle}`.toLowerCase();
+  const text = ${title}  .toLowerCase();
   
   if (isBlocked(text)) {
     return { 
@@ -234,8 +234,8 @@ function filterSongForBar(songData, barConfig = { name: "Rafa's Bar", strictMode
   return {
     allowed: result.allowed,
     reason: result.allowed ? 
-      `✅ Aprobada - ${result.reason.replace('_', ' ')}` : 
-      `❌ Bloqueada - ${result.reason.replace('_', ' ')}`,
+      ✅ Aprobada -  : 
+      ❌ Bloqueada - ,
     confidence: result.confidence,
     details: result
   };

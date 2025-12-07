@@ -1,4 +1,4 @@
-require('dotenv').config({ path: require('path').resolve(__dirname, '.env') });
+﻿require('dotenv').config({ path: require('path').resolve(__dirname, '.env') });
 const express = require("express");
 const cors = require("cors");
 const { google } = require("googleapis");
@@ -44,13 +44,6 @@ if (fs.existsSync(TOKEN_PATH)) {
       oAuth2Client.setCredentials(tokens);
       hasValidTokens = true;
       console.log("✅ TOKENS cargados correctamente.");
-      
-      oAuth2Client.on('tokens', (tokens) => {
-        if (tokens.refresh_token) {
-          fs.writeFileSync(TOKEN_PATH, JSON.stringify(tokens, null, 2));
-          console.log("🔄 Token refrescado y guardado.");
-        }
-      });
     }
   } catch (err) {
     console.error("❌ Error al cargar tokens.json:", err.message);
@@ -86,16 +79,16 @@ app.get("/oauth2callback", async (req, res) => {
   } catch (err) {
     lastAuthError = err.message;
     console.error("Error en OAuth callback:", err.message);
-    res.status(500).send(`
+    res.status(500).send(
       <html>
         <head><meta charset="UTF-8"><title>Error - MOYOFY</title></head>
         <body style="background:#12121f;color:white;text-align:center;padding:50px;">
           <h1>❌ ERROR DE AUTORIZACIÓN</h1>
-          <p>${err.message}</p>
+          <p></p>
           <button onclick="window.location.href='/auth'" style="background:#ff004c;color:white;border:none;padding:15px 30px;font-size:1.1rem;border-radius:25px;margin-top:20px;">🔁 INTENTAR DE NUEVO</button>
         </body>
       </html>
-    `);
+    );
   }
 });
 
@@ -155,7 +148,7 @@ app.get("/search", async (req, res) => {
       .filter(item => item.allowed)
       .slice(0, 8);
 
-    console.log(`🔍 Búsqueda: "${query}" | Resultados: ${r.data.items.length} → ${filteredItems.length} aprobados`);
+    console.log(🔍 Búsqueda: "" | Resultados:  →  aprobados);
 
     res.json({
       ok: true,
@@ -212,7 +205,7 @@ app.post("/add-song", async (req, res) => {
         }
       }
     });
-    console.log(`✅ Canción agregada a la playlist ${playlistId}: ${videoId}`);
+    console.log(✅ Canción agregada a la playlist : );
     
     res.json({ 
       ok: true,
@@ -237,17 +230,9 @@ app.post("/add-song", async (req, res) => {
   }
 });
 
-// === SERVIR INTERFAZ FRONTEND (RUTAS CORREGIDAS PARA PRODUCCIÓN) ===
+// === SERVIR INTERFAZ FRONTEND (RUTAS CORREGIDAS) ===
 const publicPath = path.join(__dirname, "../public");
 const indexPath = path.join(publicPath, "index.html");
-
-// Diagnóstico en producción
-if (process.env.NODE_ENV === 'production') {
-  console.log("🔍 Verificando rutas en producción:");
-  console.log("publicPath:", publicPath);
-  console.log("indexPath:", indexPath);
-  console.log("Directorio actual:", __dirname);
-}
 
 app.use(express.static(publicPath, {
   setHeaders: (res) => {
@@ -259,17 +244,10 @@ app.get("/", (_, res) => {
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
   } else {
-    console.error("❌ ERROR CRÍTICO: index.html no encontrado en:", indexPath);
-    try {
-      const publicFiles = fs.readdirSync(publicPath);
-      console.error("📁 Archivos en public/:", publicFiles);
-    } catch (err) {
-      console.error("❌ Error al listar public/:", err.message);
-    }
+    console.error("❌ index.html no encontrado en:", indexPath);
     res.status(500).json({ 
       ok: false, 
-      error: "Interfaz principal no disponible - index.html no encontrado",
-      path_checked: indexPath
+      error: "Interfaz principal no disponible - index.html no encontrado" 
     });
   }
 });
@@ -286,26 +264,6 @@ app.use((err, req, res, next) => {
 // === SERVIDOR ===
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`🚀 MOYOFY PREMIUM ONLINE EN PUERTO ${PORT}`);
-  console.log(`🌐 URL local: http://localhost:${PORT}`);
-  
-  const baseUrl = process.env.REDIRECT_URI 
-    ? process.env.REDIRECT_URI.replace('/oauth2callback', '') 
-    : `http://localhost:${PORT}`;
-  
-  console.log(`🔗 URL de autenticación: ${baseUrl}/auth`);
-  
-  // Verificación crítica al iniciar
-  setTimeout(() => {
-    if (!youtubeApiKey) {
-      console.error("❌ ¡ALERTA! YOUTUBE_API_KEY no está configurada.");
-    }
-    if (!process.env.OAUTH_CLIENT_ID || !process.env.OAUTH_CLIENT_SECRET) {
-      console.error("❌ ¡ALERTA! Credenciales OAuth no configuradas.");
-    }
-    if (!hasValidTokens) {
-      console.warn("⚠️ ¡IMPORTANTE! Necesitas autenticarte con YouTube para agregar canciones.");
-      console.warn(`   Visita: ${baseUrl}/auth`);
-    }
-  }, 2000);
+  console.log(🚀 MOYOFY PREMIUM ONLINE EN PUERTO );
+  console.log(🌐 URL base: );
 });

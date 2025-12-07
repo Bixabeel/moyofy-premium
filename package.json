@@ -1,7 +1,7 @@
-{
-  "name": "moyofy",
+﻿{
+  "name": "moyofy-premium",
   "version": "2.0.0",
-  "description": "MOYOFY - Sistema de entretenimiento social para bares",
+  "description": "MOYOFY PREMIUM v2 - Sistema de entretenimiento social para bares",
   "main": "backend/server.js",
   "scripts": {
     "start": "node backend/server.js",
