@@ -129,6 +129,19 @@
       animation: fadeIn 0.7s ease;
     }
     
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .search-label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+      color: var(--light);
+      font-weight: 500;
+    }
+    
     .search-input {
       width: 100%;
       padding: 15px;
@@ -146,6 +159,10 @@
       outline: none;
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(255, 0, 76, 0.3);
+    }
+    
+    .search-input::placeholder {
+      color: #888;
     }
     
     .search-btn {
@@ -169,6 +186,10 @@
       background: var(--primary-dark);
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(255, 0, 76, 0.4);
+    }
+    
+    .search-btn:active {
+      transform: translateY(0);
     }
     
     .results-container {
@@ -234,6 +255,12 @@
       text-align: center;
       font-weight: bold;
       animation: pulse 0.5s ease;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
     }
     
     .message.success {
@@ -402,7 +429,7 @@
     <div class="search-box">
       <h3>🎵 Buscar canción</h3>
       <p style="color: #aaa; margin-bottom: 15px; font-size: 0.95rem;">
-        Solo se permiten géneros afines al rock (clásico, alternativo, metal, punk, indie, industrial, etc.).
+        Solo se permiten géneros afines al rock (clásico, alternativo, metal, punk, indie, etc.).
         <br>
         <span style="color: var(--success); display: inline-block; margin-top: 5px;">
           <i class="fas fa-check-circle"></i> ¡Gana MOYOS por cada canción que agregues!
@@ -416,7 +443,7 @@
       
       <div id="auth-required-message" style="display: none;" class="auth-required" onclick="redirectToAuth()">
         <i class="fas fa-lock"></i> <strong>🔐 ¡NECESITAS AUTENTICARTE CON YOUTUBE!</strong><br>
-        Para agregar canciones a la playlist, debes autorizar MOYOFY con tu cuenta de Google.<br>
+        Para agregar canciones al playlist del bar, debes autorizar MOYOFY con tu cuenta de Google.<br>
         <small>(Solo una vez por sesión)</small>
       </div>
       
@@ -467,8 +494,8 @@
         loadUserRanking();
       } else {
         currentUser = {
-          id: 'user_' + Math.random().toString(36).substr(2, 9),
-          nickname: 'Invitado',
+          id: `user_${Date.now()}`,
+          nickname: "Invitado",
           points: 100,
           level: 1,
           songsAdded: 0
@@ -486,7 +513,7 @@
     
     async function checkServerConnection() {
       try {
-        const response = await fetch(${API_BASE}/health);
+        const response = await fetch(`${API_BASE}/health`);
         const data = await response.json();
         
         if (data.ok) {
@@ -508,7 +535,7 @@
     }
     
     function redirectToAuth() {
-      window.location.href = ${API_BASE}/auth;
+      window.location.href = `${API_BASE}/auth`;
     }
     
     function showUserProfile() {
@@ -527,20 +554,15 @@
         return;
       }
       
-      if (!currentUser) {
-        showMessage('⚠️ Necesitas ingresar tu nombre primero', 'warning');
-        return;
-      }
-      
-      document.getElementById('results-container').innerHTML = 
+      document.getElementById('results-container').innerHTML = `
         <div class="loading">
           <div class="spinner"></div>
-          <p>Buscando canciones... <strong></strong></p>
+          <p>Buscando canciones... <strong>${query}</strong></p>
         </div>
-      ;
+      `;
       
       try {
-        const response = await fetch(${API_BASE}/search?q=);
+        const response = await fetch(`${API_BASE}/search?q=${encodeURIComponent(query)}`);
         const data = await response.json();
         
         if (!data.ok) {
@@ -550,18 +572,18 @@
         displaySearchResults(data.items, data.filterStats);
         
         if (data.items.length > 0) {
-          showMessage(✅ ¡Encontramos  canciones para ti!, 'success');
+          showMessage(`✅ ¡Encontramos ${data.items.length} canciones para ti!`, 'success');
         } else {
           showMessage('🔍 No encontramos canciones que cumplan con los criterios del bar', 'warning');
         }
         
       } catch (error) {
         console.error('Error en búsqueda:', error);
-        document.getElementById('results-container').innerHTML = 
+        document.getElementById('results-container').innerHTML = `
           <div class="message error">
-            <i class="fas fa-exclamation-circle"></i> 
+            <i class="fas fa-exclamation-circle"></i> ${error.message}
           </div>
-        ;
+        `;
       }
     }
     
@@ -569,7 +591,7 @@
       const container = document.getElementById('results-container');
       
       if (items.length === 0) {
-        container.innerHTML = 
+        container.innerHTML = `
           <div class="message warning">
             <i class="fas fa-music"></i> No se encontraron canciones que cumplan con los criterios de Rafa's Bar.
             <p style="margin-top: 10px; font-size: 0.9rem; color: #ddd;">
@@ -577,33 +599,33 @@
               <br>Prueba con términos como "classic rock", "metal", "punk rock", etc.
             </p>
           </div>
-        ;
+        `;
         return;
       }
       
       let html = '';
       
       if (stats) {
-        html += 
+        html += `
           <div class="message info" style="background: rgba(108, 117, 125, 0.15); border: 1px solid rgba(108, 117, 125, 0.3);">
-            <i class="fas fa-filter"></i> Resultados filtrados: / 
-            (%) aprobados para Rafa's Bar
+            <i class="fas fa-filter"></i> Resultados filtrados: ${stats.approved}/${stats.totalResults} 
+            (${stats.approvalRate}%) aprobados para Rafa's Bar
           </div>
-        ;
+        `;
       }
       
       items.forEach((item, index) => {
-        html += 
-          <div class="song-item" onclick="addSong('', '', this)">
+        html += `
+          <div class="song-item" onclick="addSong('${item.videoId}', '${item.title.replace(/'/g, "\\'")}', this)">
             <div class="song-info">
-              <div class="song-title"></div>
-              <div class="song-artist"></div>
+              <div class="song-title">${item.title}</div>
+              <div class="song-artist">${item.artist || 'Artista desconocido'}</div>
             </div>
             <button class="add-btn">
               <i class="fas fa-plus"></i> AGREGAR
             </button>
           </div>
-        ;
+        `;
       });
       
       container.innerHTML = html;
@@ -627,13 +649,12 @@
         button.disabled = true;
         button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> AGREGANDO...';
         
-        const response = await fetch(${API_BASE}/add-song, {
+        const response = await fetch(`${API_BASE}/add-song`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            playlistId: 'PLh3noVK16sZm3ntrP4ZVaOjlzqFABKXpF',
             videoId: videoId,
             userId: currentUser.id
           })
@@ -655,16 +676,16 @@
           
           localStorage.setItem('moyofy_user', JSON.stringify(currentUser));
           
-          let successMessage = ✅ ¡ agregada a la playlist! +10 MOYOS;
+          let successMessage = `✅ ¡${title} agregada al playlist del bar! +10 MOYOS`;
           
           showMessage(successMessage, 'success');
           
           document.getElementById('song-search').value = '';
-          document.getElementById('results-container').innerHTML = 
+          document.getElementById('results-container').innerHTML = `
             <div class="message success">
               <i class="fas fa-check-circle"></i> ¡Canción agregada exitosamente!
             </div>
-          ;
+          `;
           
         } else {
           if (data.requiresAuth) {
@@ -677,7 +698,7 @@
         
       } catch (error) {
         console.error('Error al agregar canción:', error);
-        showMessage(❌ Error: , 'error');
+        showMessage(`❌ Error: ${error.message}`, 'error');
       } finally {
         const button = element.querySelector('.add-btn');
         if (button) {
@@ -690,7 +711,7 @@
     
     async function loadUserRanking() {
       try {
-        const response = await fetch(${API_BASE}/user/profile?userId=);
+        const response = await fetch(`${API_BASE}/user/profile?userId=${currentUser?.id || 'anonymous'}`);
         const data = await response.json();
         
         if (data.ok) {
@@ -705,11 +726,11 @@
       const container = document.getElementById('ranking-list');
       
       if (!users || users.length === 0) {
-        container.innerHTML = 
+        container.innerHTML = `
           <div class="message info" style="background: rgba(108, 117, 125, 0.15); border: 1px solid rgba(108, 117, 125, 0.3);">
             <i class="fas fa-users"></i> Aún no hay usuarios en el ranking
           </div>
-        ;
+        `;
         return;
       }
       
@@ -719,18 +740,18 @@
         const isCurrentUser = currentUser && currentUser.nickname === user.nickname;
         const highlight = isCurrentUser ? 'style="background: rgba(255, 0, 76, 0.15); border-left: 4px solid var(--primary);"' : '';
         
-        html += 
-          <div class="rank-item" >
+        html += `
+          <div class="rank-item" ${highlight}>
             <span>
-              <strong>.</strong> 
-              
+              <strong>${user.rank}.</strong> ${user.nickname}
+              ${isCurrentUser ? '<span style="color: var(--primary); margin-left: 5px;">(TÚ)</span>' : ''}
             </span>
             <span>
               <i class="fas fa-coins" style="color: var(--success); margin-right: 5px;"></i>
-               MOYOS • Nivel 
+              ${user.points} MOYOS • Nivel ${user.level}
             </span>
           </div>
-        ;
+        `;
       });
       
       container.innerHTML = html;
@@ -738,12 +759,12 @@
     
     function showMessage(text, type = 'info') {
       const container = document.getElementById('message-container');
-      container.innerHTML = 
-        <div class="message  bounce">
-          <i class="fas fa-"></i>
-          
+      container.innerHTML = `
+        <div class="message ${type} bounce">
+          <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
+          ${text}
         </div>
-      ;
+      `;
       
       setTimeout(() => {
         container.innerHTML = '';
@@ -757,15 +778,15 @@
       for (let i = 0; i < 100; i++) {
         const confetti = document.createElement('div');
         confetti.style.position = 'absolute';
-        confetti.style.width = ${Math.random() * 10 + 5}px;
-        confetti.style.height = ${Math.random() * 10 + 5}px;
+        confetti.style.width = `${Math.random() * 10 + 5}px`;
+        confetti.style.height = `${Math.random() * 10 + 5}px`;
         confetti.style.backgroundColor = getRandomColor();
         confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-        confetti.style.top = ${Math.random() * 100}%;
-        confetti.style.left = ${Math.random() * 100}%;
-        confetti.style.transform = otate(deg);
+        confetti.style.top = `${Math.random() * 100}%`;
+        confetti.style.left = `${Math.random() * 100}%`;
+        confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
         confetti.style.opacity = Math.random();
-        confetti.style.animation = all s linear forwards;
+        confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
         
         confettiContainer.appendChild(confetti);
       }

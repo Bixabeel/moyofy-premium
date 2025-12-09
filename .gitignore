@@ -13,6 +13,7 @@ pids
 # Dirección y archivo para Railway
 /mnt/data/
 backend/tokens.json
+backend/.env
 
 # Environment variables
 .env
@@ -25,12 +26,6 @@ backend/tokens.json
 logs
 *.log
 npm-debug.log*
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
 
 # Coverage directory used by tools like istanbul
 coverage

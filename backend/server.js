@@ -179,10 +179,13 @@ app.get("/search", async (req, res) => {
 // === AGREGAR CANCIÓN A PLAYLIST ===
 app.post("/add-song", async (req, res) => {
   try {
-    const { playlistId, videoId, userId } = req.body;
-    if (!playlistId || !videoId || !userId) {
-      return res.status(400).json({ ok: false, error: "Datos faltantes: playlistId, videoId o userId." });
+    const { videoId, userId } = req.body;
+    if (!videoId || !userId) {
+      return res.status(400).json({ ok: false, error: "Datos faltantes: videoId o userId." });
     }
+
+    // Usar el playlist ID correcto del bar
+    const playlistId = process.env.DEFAULT_PLAYLIST_ID || "PLo_v1BZSJlIvJnX7ISeilNokZp58D1nCe";
 
     if (!hasValidTokens || !oAuth2Client.credentials.access_token) {
       return res.status(401).json({ 
@@ -209,14 +212,14 @@ app.post("/add-song", async (req, res) => {
         }
       });
       
-      console.log(`✅ Canción agregada a la playlist ${playlistId}: ${videoId}`);
+      console.log(`✅ Canción agregada al playlist del bar ${playlistId}: ${videoId}`);
       res.json({ 
         ok: true,
         user: {
           points: 110,
           nickname: "Usuario_" + userId.slice(0,6)
         },
-        successMessage: "✅ ¡Canción agregada exitosamente!"
+        successMessage: "✅ ¡Canción agregada exitosamente al playlist del bar!"
       });
       
     } catch (insertError) {
@@ -229,8 +232,8 @@ app.post("/add-song", async (req, res) => {
         console.error("⚠️ Error de permisos: No puedes editar esta playlist");
         return res.status(403).json({ 
           ok: false, 
-          error: "🚫 No tienes permiso para editar esta playlist. Asegúrate de que la playlist es tuya o que tienes permisos de propietario.",
-          solution: "Verifica que tu cuenta de Google está asociada al canal del playlist"
+          error: "🚫 No tienes permiso para editar el playlist del bar. Asegúrate de que estás autenticado con una cuenta de prueba autorizada.",
+          solution: "Usa una de las cuentas de prueba configuradas en Google Cloud Console"
         });
       }
       

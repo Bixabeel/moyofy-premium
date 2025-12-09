@@ -76,7 +76,7 @@ const BLOCKED_TERMS = [
   "bad bunny", "pimpinela", "karol g", "anuel", "feid", "maluma", "yuri",
   "manuel mijares", "camilo sesto", "cristian castro", "luis miguel", "rosalía",
   "la oreja de van gogh", "camilo", "grupo firme", "temerarios", "vicente fernández",
-  "ana gabriel"
+  "ana gabriel", "orangesquaremoon"
 ];
 
 // 🧠 FUNCIÓN PARA VERIFICAR SI UN ARTISTA ESTÁ PERMITIDO
@@ -96,9 +96,9 @@ function isAllowedArtist(text = "") {
         .replace(/[\u0300-\u036f]/g, '')
         .trim();
       
-      const regex = new RegExp(\\b\\b, 'i');
+      const regex = new RegExp(`\\b${normalizedArtist}\\b`, 'i');
       if (regex.test(normalizedText)) {
-        console.log(✅ Artista permitido encontrado:  (categoría: ));
+        console.log(`✅ Artista permitido encontrado: ${artist} (categoría: ${category})`);
         return true;
       }
     }
@@ -121,7 +121,7 @@ function isAllowedGenre(text = "") {
       .replace(/[\u0300-\u036f]/g, '')
       .trim();
     
-    const regex = new RegExp(\\b\\b, 'i');
+    const regex = new RegExp(`\\b${normalizedGenre}\\b`, 'i');
     return regex.test(normalizedText);
   });
 }
@@ -140,7 +140,7 @@ function isBlocked(text = "") {
       .replace(/[\u0300-\u036f]/g, '')
       .trim();
     
-    const regex = new RegExp(\\b\\b, 'i');
+    const regex = new RegExp(`\\b${normalizedTerm}\\b`, 'i');
     return regex.test(normalizedText);
   });
 }
@@ -189,7 +189,7 @@ function calculateSongScore(text = "") {
 // 🧠 SISTEMA DE CLASIFICACIÓN INTELIGENTE
 function classifySong(songData) {
   const { title, artist, channelId, channelTitle } = songData;
-  const text = ${title}  .toLowerCase();
+  const text = `${title} ${artist} ${channelTitle}`.toLowerCase();
   
   if (isBlocked(text)) {
     return { 
@@ -234,8 +234,8 @@ function filterSongForBar(songData, barConfig = { name: "Rafa's Bar", strictMode
   return {
     allowed: result.allowed,
     reason: result.allowed ? 
-      ✅ Aprobada -  : 
-      ❌ Bloqueada - ,
+      `✅ Aprobada - ${result.reason.replace('_', ' ')}` : 
+      `❌ Bloqueada - ${result.reason.replace('_', ' ')}`,
     confidence: result.confidence,
     details: result
   };
