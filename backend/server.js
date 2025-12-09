@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// === CONFIGURACIÓN UTF-8 CORRECTA ===
+// === UTF-8 PARA SOPORTE DE CARACTERES ===
 app.use((req, res, next) => {
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   next();
@@ -79,16 +79,16 @@ app.get("/oauth2callback", async (req, res) => {
   } catch (err) {
     lastAuthError = err.message;
     console.error("Error en OAuth callback:", err.message);
-    res.status(500).send(
+    res.status(500).send(`
       <html>
         <head><meta charset="UTF-8"><title>Error - MOYOFY</title></head>
         <body style="background:#12121f;color:white;text-align:center;padding:50px;">
           <h1>❌ ERROR DE AUTORIZACIÓN</h1>
-          <p></p>
+          <p>${err.message}</p>
           <button onclick="window.location.href='/auth'" style="background:#ff004c;color:white;border:none;padding:15px 30px;font-size:1.1rem;border-radius:25px;margin-top:20px;">🔁 INTENTAR DE NUEVO</button>
         </body>
       </html>
-    );
+    `);
   }
 });
 
@@ -148,7 +148,7 @@ app.get("/search", async (req, res) => {
       .filter(item => item.allowed)
       .slice(0, 8);
 
-    console.log(🔍 Búsqueda: "" | Resultados:  →  aprobados);
+    console.log(`🔍 Búsqueda: "${query}" | Resultados: ${r.data.items.length} → ${filteredItems.length} aprobados`);
 
     res.json({
       ok: true,
@@ -193,31 +193,64 @@ app.post("/add-song", async (req, res) => {
     }
 
     const yt = google.youtube({ version: "v3", auth: oAuth2Client });
-    await yt.playlistItems.insert({
-      part: "snippet",
-      requestBody: {
-        snippet: {
-          playlistId,
-          resourceId: {
-            kind: "youtube#video",
-            videoId
+    
+    // Intentar agregar la canción
+    try {
+      await yt.playlistItems.insert({
+        part: "snippet",
+        requestBody: {
+          snippet: {
+            playlistId,
+            resourceId: {
+              kind: "youtube#video",
+              videoId
+            }
           }
         }
+      });
+      
+      console.log(`✅ Canción agregada a la playlist ${playlistId}: ${videoId}`);
+      res.json({ 
+        ok: true,
+        user: {
+          points: 110,
+          nickname: "Usuario_" + userId.slice(0,6)
+        },
+        successMessage: "✅ ¡Canción agregada exitosamente!"
+      });
+      
+    } catch (insertError) {
+      console.error("❌ Error al insertar canción:", insertError.message);
+      
+      // Manejar error específico de "Forbidden"
+      if (insertError.message.includes("Forbidden") || 
+          insertError.message.includes("not allowed") ||
+          insertError.message.includes("permission denied")) {
+        console.error("⚠️ Error de permisos: No puedes editar esta playlist");
+        return res.status(403).json({ 
+          ok: false, 
+          error: "🚫 No tienes permiso para editar esta playlist. Asegúrate de que la playlist es tuya o que tienes permisos de propietario.",
+          solution: "Verifica que tu cuenta de Google está asociada al canal del playlist"
+        });
       }
-    });
-    console.log(✅ Canción agregada a la playlist : );
-    
-    res.json({ 
-      ok: true,
-      user: {
-        points: 110,
-        nickname: "Usuario_" + userId.slice(0,6)
-      },
-      successMessage: "✅ ¡Canción agregada exitosamente!"
-    });
+      
+      // Otros errores
+      if (insertError.response?.data?.error) {
+        const youtubeError = insertError.response.data.error;
+        if (youtubeError.code === 403) {
+          return res.status(403).json({ 
+            ok: false, 
+            error: "🔐 Error de permisos: Tu sesión de YouTube ha expirado o no tienes permisos para editar playlists.",
+            solution: "Vuelve a autenticarte en /auth"
+          });
+        }
+      }
+      
+      throw insertError;
+    }
     
   } catch (err) {
-    console.error("❌ Error al agregar canción:", err.message);
+    console.error("❌ Error general al agregar canción:", err.message);
     if (err.message.includes("unauthorized") || err.message.includes("invalid_grant")) {
       hasValidTokens = false;
       return res.status(401).json({ 
@@ -230,7 +263,7 @@ app.post("/add-song", async (req, res) => {
   }
 });
 
-// === SERVIR INTERFAZ FRONTEND (RUTAS CORREGIDAS) ===
+// === SERVIR INTERFAZ FRONTEND ===
 const publicPath = path.join(__dirname, "../public");
 const indexPath = path.join(publicPath, "index.html");
 
@@ -264,6 +297,6 @@ app.use((err, req, res, next) => {
 // === SERVIDOR ===
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(🚀 MOYOFY PREMIUM ONLINE EN PUERTO );
-  console.log(🌐 URL base: );
+  console.log(`🚀 MOYOFY PREMIUM ONLINE EN PUERTO ${PORT}`);
+  console.log(`🌐 URL base: ${process.env.REDIRECT_URI?.replace('/oauth2callback', '') || 'http://localhost:' + PORT}`);
 });
